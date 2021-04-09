@@ -1,0 +1,9 @@
+node_modules/
+public/
+coverage/
+reports/
+**/*.test.js
+*.log
+*.xml
+*.env*
+.git

@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kustomize-microservices-api
+  labels:
+    app.kubernetes.io/part-of: kustomize-microservices
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: kustomize-microservices-api
+  template:
+    metadata:
+      labels:
+        app: kustomize-microservices-api
+    spec:
+      containers:
+        - name: kustomize-microservices-api
+          image: kustomize-microservices-api:latest # This gets switched for a real image name by kustomize
+          env:
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: pg-secret
+                  key: PGPASSWORD
+          envFrom:
+            - configMapRef:
+                name: pg-config
+          ports:
+            - containerPort: 3000
+          readinessProbe: # use Readiness Probes for your web app to decide when the Pod should receive traffic
+            httpGet:
+              path: /api/readiness #our default BaseRouter responds to /api requests
+              port: 3000
+            initialDelaySeconds: 60
+            timeoutSeconds: 5
+          livenessProbe: # use Liveness Probes to tell the platform when to kill containers it thinks are dead or deadlocked; this should be almost never, so we choose very conservatively high values. Otherwise we get containers being killed under load, which can lead to cascading failures,
+            httpGet:
+              path: /api/liveness #our default BaseRouter responds to /api requests
+              port: 3000
+            initialDelaySeconds: 130
+            timeoutSeconds: 10
+            failureThreshold: 10

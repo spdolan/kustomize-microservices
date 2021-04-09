@@ -1,0 +1,10 @@
+{
+  "name": "kustomize-microservices",
+  "version": "0.0.1",
+  "main": "index.js",
+  "repository": "https://github.com/spdolan/kustomize-microservices.git",
+  "private": true,
+  "workspaces": ["server","client"],
+  "author": "<sdolan@theclimateservice.com>",
+  "license": "MIT"
+}

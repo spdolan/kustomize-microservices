@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: kustomize-microservices-spa
+  labels:
+    app: kustomize-microservices-spa
+spec:
+  ports:
+    - name: http
+      port: 8080
+  selector:
+    app: kustomize-microservices-spa

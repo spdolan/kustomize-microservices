@@ -1,0 +1,13 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+bases:
+  - ../../base/server
+  - ../../base/client
+namePrefix: test-
+images:
+- name: kustomization-microservices-api
+  newName: seandolan/kustomization-microservices-api
+  newTag: IMAGE_TAG # this will be generated at deploy time
+- name: kustomization-microservices-spa
+  newName: seandolan/kustomization-microservices-spa
+  newTag: IMAGE_TAG # this will be generated at deploy time

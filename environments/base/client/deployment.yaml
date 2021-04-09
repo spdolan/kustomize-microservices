@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kustomize-microservices-spa
+  labels:
+    app.kubernetes.io/part-of: kustomize-microservices
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: kustomize-microservices-spa
+  template:
+    metadata:
+      labels:
+        app: kustomize-microservices-spa
+    spec:
+      containers:
+        - name: kustomize-microservices-spa
+          image: kustomize-microservices-spa:latest  # This gets switched for a real image name by kustomize
+          env:
+            - name: REACT_APP_API_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: spa-config
+                  key: REACT_APP_API_URL
+          envFrom:
+            - configMapRef:
+                name: spa-config
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+          httpGet:
+            scheme: HTTPS
+            path: /index.html
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 5
